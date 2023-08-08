@@ -87,6 +87,16 @@ void deleteAtMiddle(struct Node** head, int position) {
     free(current);
 }
 
+int findLength(struct Node* head) {
+    int length = 0;
+    struct Node* current = head;
+    while (current != NULL) {
+        length++;
+        current = current->next;
+    }
+    return length;
+}
+
 void displayList(struct Node* head) {
     struct Node* current = head;
     while (current != NULL) {
@@ -109,7 +119,8 @@ int main() {
         printf("4. Delete at beginning\n");
         printf("5. Delete at middle\n");
         printf("6. Display list\n");
-        printf("7. Exit\n");
+        printf("7. Find length of list\n");
+        printf("8. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
@@ -143,6 +154,9 @@ int main() {
                 displayList(head);
                 break;
             case 7:
+                printf("Length of list: %d\n", findLength(head));
+                break;
+            case 8:
                 // Clean up memory
                 while (head != NULL) {
                     struct Node* temp = head;

@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+} Node;
+
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed.\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void insert(Node** head, int data) {
+    Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        newNode->prev = newNode;
+        newNode->next = newNode;
+    } else {
+        newNode->prev = (*head)->prev;
+        newNode->next = *head;
+        (*head)->prev->next = newNode;
+        (*head)->prev = newNode;
+    }
+}
+
+void delete(Node** head, int value) {
+    if (*head == NULL) {
+        return;
+    }
+
+    Node* current = *head;
+    while (current->next != *head) {
+        if (current->data == value) {
+            if (current == *head) {
+                *head = (*head)->next;
+            }
+            current->prev->next = current->next;
+            current->next->prev = current->prev;
+            free(current);
+            return;
+        }
+        current = current->next;
+    }
+
+    if (current->data == value) {
+        current->prev->next = *head;
+        (*head)->prev = current->prev;
+        free(current);
+    }
+}
+
+void display(Node* head) {
+    if (head == NULL) {
+        return;
+    }
+
+    Node* current = head;
+    do {
+        printf("%d ", current->data);
+        current = current->next;
+    } while (current != head);
+    printf("\n");
+}
+
+int main() {
+    Node* cll = NULL;
+
+    insert(&cll, 1);
+    insert(&cll, 2);
+    insert(&cll, 3);
+    insert(&cll, 4);
+
+    printf("Original list: ");
+    display(cll);
+
+    delete(&cll, 2);
+    delete(&cll, 4);
+
+    printf("List after deletions: ");
+    display(cll);
+
+    return 0;
+}
